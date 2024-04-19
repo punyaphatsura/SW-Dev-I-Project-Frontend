@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background: #ffffff;
+}
+
+.disableScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.verticalCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+body {
+  color: #232323;
+}
+
+.dragged {
+  background-color: #f0f0f0;
+  /* Change the background color */
+  border-color: #4caf50;
+  /* Change the border color */
+  transform: scale(1.05);
+  /* Apply a slight scale transformation */
+  opacity: 0.8;
+  /* Reduce opacity to give a translucent effect */
+}
