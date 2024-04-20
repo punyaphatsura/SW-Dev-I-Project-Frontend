@@ -16,7 +16,9 @@ import { BsFillTelephoneFill } from 'react-icons/bs';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import GmailIcon from '@/app/assets/svgs/gmail_icon.svg';
+import axios from 'axios';
 
+import { toast } from 'react-toastify';
 const Page = () => {
   const router = useRouter();
   const [isFocusTextfield, setIsFocusTextfield] = useState(false);
@@ -26,7 +28,6 @@ const Page = () => {
 
   const [isLoading, setLoading] = useState(false);
   const [loginState, setLoginState] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult>();
@@ -57,10 +58,42 @@ const Page = () => {
     localStorage.removeItem('token');
   }, []);
 
+  const checkPhoneNumberExists = async (phoneNumber: string) => {
+    try {
+      console.log('Checking phone number:', phoneNumber);
+      const res = await axios
+        .post(`http://localhost:3000/api/v1/auth/check-phone`, { phoneNumber })
+        .then((res) => {
+          console.log(res);
+          return true;
+        }); // This should return { isUsed: true/false }
+      return res;
+    } catch (error) {
+      console.error('Error checking phone number:', error);
+
+      return false; // Assume not used if error, adjust based on your error handling policy
+    }
+  };
+
   const onSubmitPhoneNumber = async () => {
     const appVerifier = (window as any).recaptchaVerifier;
 
     const formattedPhoneNumber = '+66' + tel.slice(1);
+    const phoneCheck = await checkPhoneNumberExists(tel);
+    if (!phoneCheck) {
+      toast.error('Failed to verify phone number. Please try again.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      setLoading(false);
+      return;
+    }
 
     signInWithPhoneNumber(auth, formattedPhoneNumber, appVerifier)
       .then((confirmationResult) => {
@@ -82,55 +115,60 @@ const Page = () => {
       });
   };
 
-  const checkUserValid = (): boolean => {
-    if (auth.currentUser) return Math.random() > 0.5;
-    return false;
+  const checkUserValid = async (token: string) => {
+    const url_endpoint = 'http://localhost:3000';
+    await axios
+      .post(url_endpoint + '/api/v1/auth/checkToken', {
+        token: `Bearer ${token}`,
+      })
+      .then((response) => {
+        console.log(response);
+        localStorage.setItem('token', token);
+        router.push('/success');
+      })
+      .catch(async (error) => {
+        console.log(error);
+        if (error.response.status === 404) {
+          toast.error('Please register this google account first', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          console.log('Please register first');
+          return;
+        }
+        console.log(error);
+      });
+    // if (userExist.dat) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   };
 
   const handleSignInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-
     try {
       const result = await signInWithPopup(auth, provider);
-
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      localStorage.setItem('token', await result.user.getIdToken());
-      router.push('/success');
-
-      // const isValid = await checkUserValid();
-      // if (isValid.error) return;
-      // if (isValid.valid) {
-      //   router.push('/');
-      // } else {
-      //   setState(2);
-      // }
-      // if (!auth.currentUser) return;
-      // const response = await apiService.loginWithFirebaseToken(await result.user.getIdToken());
-      // if (response.status === ApiStatus.SUCCESS) {
-      //   window.location.href = '/';
-      // } else {
-      //   const responseRegister = await apiService.registerWithFirebaseToken(
-      //     await result.user.getIdToken()
-      //   );
-      //   setState(2);
-      // }
-
-      // if (credential === null) return;
-      // const token = credential.accessToken;
-      // The signed-in user info.
-      // const user = result.user;
-      // ...
+      const token = await result.user.getIdToken();
+      checkUserValid(token);
     } catch (error) {
-      // Handle Errors here.
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
-      // The email of the user's account used.
-      // const email = error.email;
-      // The AuthCredential type that was used.
-      // const credential = GoogleAuthProvider.credentialFromError(error);
       console.log(error);
-      // ...
+      toast.error('Error' + error, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
 
@@ -229,11 +267,11 @@ const Page = () => {
               <p className="text-lg font-normal">ล็อคอิน</p>
             </button>
             <button
-              className="btn w-48 flex-row items-center rounded-xl bg-white"
+              className="btn w-full flex-row items-center rounded-xl border-none bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] outline-none hover:bg-zinc-200"
               onClick={handleSignInWithGoogle}
             >
-              <GmailIcon className="h-6 w-auto" />
-              <p className="text-ct_brown-500">Gmail</p>
+              <FcGoogle className="h-6 w-auto" />
+              <p className="text-ct_brown-500">Google account</p>
             </button>
           </>
         ) : (
