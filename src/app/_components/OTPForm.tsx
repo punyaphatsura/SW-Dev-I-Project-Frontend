@@ -83,7 +83,7 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit }) => {
           ref={(input) => {
             if (input) inputsRef.current[i] = input;
           }}
-          className="h-10 w-10 rounded-xl border-2 border-solid border-gray-200 bg-white text-center text-3xl text-ss_black caret-transparent focus:border-ss_primary focus:outline-none md:h-14 md:w-14"
+          className="h-10 w-10 rounded-xl border-2 border-solid border-gray-200 bg-white text-center text-3xl caret-transparent focus:border-blue-500 focus:outline-none md:h-14 md:w-14"
         />
       );
     });
@@ -96,10 +96,12 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit }) => {
           <div className="col-span-8 text-zinc-800 md:col-span-6 md:col-start-2">
             <div className="flex flex-col items-center justify-center text-stone-700">
               <form className="rounded bg-white p-8">
-                <p className="font-kanit text-xl font-normal">รหัสยืนยัน</p>
-                <div className="mb-4 flex items-center gap-4">{renderOTPInputs()}</div>
+                <p className="text-xl font-normal">รหัสยืนยัน</p>
+                <div className="mb-4 flex items-center gap-4">
+                  {renderOTPInputs()}
+                </div>
                 <div className="mb-4">
-                  <p className="font-kanit inline-block w-auto cursor-pointer justify-self-start underline hover:no-underline">
+                  <p className="inline-block w-auto cursor-pointer justify-self-start underline hover:no-underline">
                     ส่งรหัสยืนยันใหม่
                   </p>
                 </div>
@@ -121,9 +123,10 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit }) => {
       </div>
       <div className="sticky bottom-2 col-span-8 mb-3 flex max-h-[720px] items-center justify-end border-0 border-t-[1px] border-zinc-200 bg-transparent px-6 py-0 md:m-0 md:border-solid md:bg-white md:px-14 md:py-8">
         <button
-          className="btn right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 bg-ss_primary px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline hover:bg-ss_primary-dark hover:text-white md:h-14 md:w-full"
+          className="bg-ss_primary hover:bg-ss_primary-dark btn right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline hover:text-white md:h-14 md:w-full"
           type="submit"
-          onClick={otpSubmit}>
+          onClick={otpSubmit}
+        >
           ยืนยัน
         </button>
       </div>
