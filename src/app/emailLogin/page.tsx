@@ -1,28 +1,35 @@
-'use client'
+'use client';
 
 // components/LoginPage.js
-import React, { FormEvent, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '@/configs/firebaseConfig'
+import React, { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig';
 
 const LoginPage = () => {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = async (event: FormEvent) => {
-    event.preventDefault()
-    setError('') // Reset error message before new attempt
+    event.preventDefault();
+    setError(''); // Reset error message before new attempt
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
-      router.push('/success') // Redirect to a dashboard page after successful login
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      localStorage.setItem('token', await userCredential.user.getIdToken());
+      router.push('/success'); // Redirect to a dashboard page after successful login
     } catch (error) {
-      setError('Failed to log in. Please check your credentials and try again.')
+      setError(
+        'Failed to log in. Please check your credentials and try again.'
+      );
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
@@ -78,7 +85,7 @@ const LoginPage = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
