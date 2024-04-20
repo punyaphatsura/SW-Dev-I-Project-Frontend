@@ -197,7 +197,7 @@ const Page = () => {
           <>
             <label className="form-control w-full">
               <div className="label">
-                <span className="text-ss_black label-text">
+                <span className="label-text text-black">
                   กรอกหมายเลขโทรศัพท์ของคุณ
                 </span>
               </div>
@@ -211,12 +211,12 @@ const Page = () => {
                     setIsTelValid(false);
                   }
                 }}
-                className={`hover:bg-ss_gray-100 flex items-center rounded-xl border-2 border-solid bg-white pl-4 transition-colors ${
+                className={`flex items-center rounded-xl border-2 border-solid bg-white pl-4 transition-colors hover:bg-zinc-200 ${
                   !isFocusTextfield
                     ? isTelValid
-                      ? 'border-ss_gray-200'
-                      : 'border-ss_negative'
-                    : 'border-ss_primary hover:border-ss_primary'
+                      ? 'border-zinc-200'
+                      : 'border-red-500'
+                    : 'border-blue-500 hover:border-blue-500'
                 }`}
                 id="box"
               >
@@ -240,7 +240,7 @@ const Page = () => {
               </div>
               {!isTelValid && (
                 <div className="label">
-                  <span className="text-ss_negative label-text">
+                  <span className="label-text text-red-500">
                     *กรุณากรอกหมายเลขโทรศัพท์ให้ถูกต้อง
                   </span>
                 </div>
@@ -248,7 +248,7 @@ const Page = () => {
             </label>
             <button
               id="sign-in-button"
-              className={`btn w-full border-none ${
+              className={`btn w-full border-none bg-blue-500 hover:bg-blue-700 ${
                 isTelValid
                   ? 'bg-ss_primary hover:bg-ss_primary-dark hover:text-ss_gray-300'
                   : 'btn-disabled'
@@ -264,7 +264,7 @@ const Page = () => {
                 if (tel.length === 10 && isTelValid) onSubmitPhoneNumber();
               }}
             >
-              <p className="text-lg font-normal">ล็อคอิน</p>
+              <p className="text-lg font-normal text-white">ล็อคอิน</p>
             </button>
             <button
               className="btn w-full flex-row items-center rounded-xl border-none bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] outline-none hover:bg-zinc-200"
