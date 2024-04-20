@@ -12,25 +12,37 @@ const Page = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setToken(localStorage.getItem('token') || '');
+    // Get the token from localStorage and update the state
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
 
   const copyToken = () => {
-    navigator.clipboard.writeText(token);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1500);
+    navigator.clipboard
+      .writeText(token)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.error('Failed to copy:', err);
+      });
   };
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div
         id="token-container"
-        className="relative w-[600px] overflow-scroll rounded border border-gray-200 bg-stone-200 p-4"
+        className="relative w-full max-w-[600px] overflow-hidden rounded border border-gray-200 bg-stone-200 p-4"
       >
-        <p className="whitespace-pre-wrap text-wrap break-all">
-          Token: {'\n\n'}
+        <p className="whitespace-pre-wrap break-all">
+          Token:
+          <br />
+          <br />
           {token}
         </p>
         <button
@@ -38,15 +50,15 @@ const Page = () => {
           onClick={copyToken}
           style={{ transition: 'background-color 0.3s, color 0.3s' }}
         >
-          {copied ? (
-            <>
-              <FiCheck />
-            </>
-          ) : (
-            <FiCopy />
-          )}
+          {copied ? <FiCheck /> : <FiCopy />}
         </button>
       </div>
+      <button
+        className="mt-4 w-full max-w-[600px] rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        onClick={() => router.back()}
+      >
+        Back
+      </button>
     </div>
   );
 };
