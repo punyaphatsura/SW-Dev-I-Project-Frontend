@@ -21,10 +21,6 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [otp, setOtp] = useState('');
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult>();
-  const [name, setName] = useState('');
   const [role, setRole] = useState('user'); // Default to 'user'
 
   useEffect(() => {
@@ -36,8 +32,6 @@ const RegisterPage = () => {
       }
     );
   }, []);
-
-  const [state, setState] = useState(0);
 
   const onSubmit = async () => {
     try {
@@ -81,15 +75,6 @@ const RegisterPage = () => {
         // Complete sign-in.
         return confirmationResult.confirm(code);
       });
-      // const phoneCre = await confirmationResult.confirm(otp);
-
-      // if (confirmationResult) {
-      //   const credential = EmailAuthProvider.credential(email, password);
-      //   await linkWithCredential(user, credential);
-      // }
-
-      // 6621d830881b3a0373666b41
-      //
 
       if (temp) {
         const url_endpoint = 'http://localhost:3000';

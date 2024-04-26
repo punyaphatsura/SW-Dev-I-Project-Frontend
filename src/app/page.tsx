@@ -98,17 +98,28 @@ const Page = () => {
       })
       .catch((error) => {
         console.log(error);
-        // toast.error(error, {
-        //   position: 'top-right',
-        //   autoClose: 5000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: 'colored',
-        // });
       });
+  };
+
+  const handleSignInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      checkUserValid(token);
+    } catch (error) {
+      console.log(error);
+      toast.error('Error' + error, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
   };
 
   const checkUserValid = async (token: string) => {
@@ -145,27 +156,6 @@ const Page = () => {
     // } else {
     //   return false;
     // }
-  };
-
-  const handleSignInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const token = await result.user.getIdToken();
-      checkUserValid(token);
-    } catch (error) {
-      console.log(error);
-      toast.error('Error' + error, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    }
   };
 
   const onSubmitOtp = (): boolean => {

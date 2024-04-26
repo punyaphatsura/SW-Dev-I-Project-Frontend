@@ -18,6 +18,7 @@ const Page = () => {
       setToken(storedToken);
     }
   }, []);
+
   const signOutHandler = async () => {
     await auth
       .signOut()
