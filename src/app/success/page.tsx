@@ -18,6 +18,17 @@ const Page = () => {
       setToken(storedToken);
     }
   }, []);
+  const signOutHandler = async () => {
+    await auth
+      .signOut()
+      .then(() => {
+        localStorage.removeItem('token');
+        router.push('/');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const copyToken = () => {
     navigator.clipboard
@@ -54,10 +65,12 @@ const Page = () => {
         </button>
       </div>
       <button
-        className="mt-4 w-full max-w-[600px] rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        onClick={() => router.back()}
+        className="mt-4 w-full max-w-[600px] rounded bg-red-500 px-4 py-2 text-white transition-colors hover:bg-red-600"
+        onClick={() => {
+          signOutHandler();
+        }}
       >
-        Back
+        Sign out
       </button>
     </div>
   );

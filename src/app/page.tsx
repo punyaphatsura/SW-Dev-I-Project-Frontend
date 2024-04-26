@@ -54,10 +54,6 @@ const Page = () => {
     }
   }, [tel]);
 
-  useEffect(() => {
-    localStorage.removeItem('token');
-  }, []);
-
   const checkPhoneNumberExists = async (phoneNumber: string) => {
     try {
       console.log('Checking phone number:', phoneNumber);
